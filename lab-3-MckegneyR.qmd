@@ -1,35 +1,35 @@
+
 # Part 1: Setup
 
 ## GitHub Workflow
 
 Set up your GitHub workflow (either using the method of creating a repository and using Version Control to set up your project or vice versa using the `usethis` package commands we have learned).
 
-Use appropriate naming conventions for your project (see Code Style Guide), e.g. lab-3-ggplot2.  
+Use appropriate naming conventions for your project (see Code Style Guide), e.g. lab-3-ggplot2.
 
-Your project folder should contain the following:  
+Your project folder should contain the following:
 
-- `.Rproj`  
-- `lab-3-student.qmd`  
-- `data` folder  
-    + `surveys.csv`  
-- rendered document (`.md`)  
+-   `.Rproj`\
+-   `lab-3-student.qmd`\
+-   `data` folder
+    -   `surveys.csv`\
+-   rendered document (`.md`)
 
-You will submit a link to your GitHub repository with all content. 
-
+You will submit a link to your GitHub repository with all content.
 
 ## Seeking Help
 
-Part of learning to program is learning from a variety of resources. Thus, I expect you will use resources that you find on the internet. There is, however, an important balance between copying someone else's code and *using their code to learn*. Therefore, if you use external resources, I want to know about it. 
+Part of learning to program is learning from a variety of resources. Thus, I expect you will use resources that you find on the internet. There is, however, an important balance between copying someone else's code and *using their code to learn*. Therefore, if you use external resources, I want to know about it.
 
-- If you used Google, you are expected to "inform" me of any resources you used by **pasting the link to the resource in a code comment next to where you used that resource**.
+-   If you used Google, you are expected to "inform" me of any resources you used by **pasting the link to the resource in a code comment next to where you used that resource**.
 
-- If you used ChatGPT, you are expected to "inform" me of the assistance you received by (1) indicating somewhere in the problem that you used ChatGPT (e.g., below the question prompt or as a code comment), and (2) downloading and attaching the `.txt` file containing your **entire** conversation with ChatGPT. ChatGPT can we used as a "search engine", but you should not copy and paste prompts from the lab or the code into your lab.  
+-   If you used ChatGPT, you are expected to "inform" me of the assistance you received by (1) indicating somewhere in the problem that you used ChatGPT (e.g., below the question prompt or as a code comment), and (2) downloading and attaching the `.txt` file containing your **entire** conversation with ChatGPT. ChatGPT can we used as a "search engine", but you should not copy and paste prompts from the lab or the code into your lab.
 
 Additionally, you are permitted and encouraged to work with your peers as you complete lab assignments, but **you are expected to do your own work**. Copying from each other is cheating, and letting people copy from you is also cheating. Please don't do either of those things.
 
 ## Lab Instructions
 
-The questions in this lab are noted with numbers and boldface. Each question will require you to produce code, whether it is one line or multiple lines. 
+The questions in this lab are noted with numbers and boldface. Each question will require you to produce code, whether it is one line or multiple lines.
 
 This document is quite plain, meaning it does not have any special formatting. As part of your demonstration of creating professional looking Quarto documents, **I would encourage you to spice your documents up (e.g., declaring execution options, specifying how your figures should be output, formatting your code output, etc.).**
 
@@ -38,9 +38,17 @@ This document is quite plain, meaning it does not have any special formatting. A
 In the code chunk below, load in the packages necessary for your analysis. You should only need the `tidyverse` package for this analysis.
 
 ```{r}
-#| label: setup
+#| label: setup                                                 # <1>
+#| echo: true
+#| output: false  
+#| code-annnotations: hover                                     # <2>
 
+library(tidyverse)                                                                                                               
 ```
+1. Source citation of link including specifications used to format cell options: <https://quarto.org/docs/reference/cells/cells-knitr.html>
+2. Source citation of link for formatting the citing of within-code annotations: <https://quarto.org/docs/authoring/code-annotation.html>
+
+
 
 # Part 2: Data Context
 
@@ -66,22 +74,22 @@ We will be investigating the animal species diversity and weights found within p
 
 ## Reading the Data into `R`
 
-We are going to use the `read_csv()` function to load in the `surveys.csv` dataset (stored in the data folder). For simplicity, name the data `surveys`. We will learn more about this function next week. 
+We are going to use the `read_csv()` function to load in the `surveys.csv` dataset (stored in the data folder). For simplicity, name the data `surveys`. We will learn more about this function next week.
 
 ```{r}
 #| label: load-data
 
 surveys <- read_csv("data/surveys.csv")
-#glimpse(surveys)
+glimpse(surveys)
 ```
 
 **1. What are the dimensions (# of rows and columns) of these data?**
 
-<!-- Run the commented code in the load-data chunk to address this question!  -->
+Using the glimpse() function, the output display shows that the 'surveys' dataframe contains 30,463 rows and 15 columns. 
 
 **2. What are the data types of the variables in this dataset?**
 
-<!-- Run the commented code in the load-data chunk to address this question!  -->
+The glimse() function output also informs that the 'surveys' dataframe contains data types of double and character. There is also one explicit column "date" containing date (time series) data.
 
 # Part 3: Exploratory Data Analysis with **`ggplot2`**
 
@@ -102,42 +110,97 @@ Let's get started!
 
 ## Scatterplot
 
-**3. First, let's create a scatterplot of the relationship between `weight` (on the $x$-axis) and `hindfoot_length` (on the $y$-axis).**
+**3. First, let's create a scatterplot of the relationship between `weight` (on the** $x$-axis) and `hindfoot_length` (on the $y$-axis).
 
 ```{r}
 #| label: scatterplot
-
+ggplot(data = surveys, 
+       mapping = aes(
+         x = weight, 
+         y = hindfoot_length)
+       ) +
+  geom_point()
+  
 ```
 
 We can see there are **a lot** of points plotted on top of each other. Let's try and modify this plot to extract more information from it.
 
 **4. Let's add transparency (`alpha`) to the points, to make the points more transparent and (possibly) easier to see.**
 
-<!-- Add code to the scatterplot you created for question 3! -->
+```{r}
+#| label: Scatterplot pt-2 point-transparency
+
+ggplot(data = surveys, 
+       mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(mapping = aes(alpha = 0.5))
+
+# Differentiate species by point color
+ggplot(data = surveys, 
+       mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(mapping = aes(alpha = 0.5, color = species))
+```
 
 Despite our best efforts there is still a substantial amount of overplotting occurring in our scatterplot. Let's try splitting the dataset into smaller subsets and see if that allows for us to see the trends a bit better.
 
 **6. Facet your scatterplot by `species`.**
 
-<!-- Add code to the scatterplot you created for question 3 (and modified for question 4)! -->
+```{r}
+#| label: Scatterplot pt-3 Faceting 
+
+ggplot(data = surveys, 
+       mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(mapping = aes(alpha = 0.5)) +
+  facet_wrap(~species)
+```
 
 **7. No plot is complete without axis labels and a title. Include reader friendly labels and a title to your plot.**
 
-<!-- Continue to modify the plot you originally created for question 3! -->
+```{r}
+#| label: Scatterplot pt-4 Axis labels
+#| echo: true
+#| code-annnotations: hover
+
+scttr_plot <- ggplot(data = surveys, 
+       mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(mapping = aes(alpha = 0.5)) + 
+  facet_wrap(~species) +
+  labs(title = "Rodent Backfoot Length to Weight Ratios", 
+                    x = "Weight (g)",
+                    y = "Hindfoot Length (mm)",
+       theme(plot.title = element_text(hjust = 0.5))) # Center title
+
+scttr_plot + theme(plot.title = element_text(hjust = 0.5))      # <3>
+ 
+```
+3. Citation to reference graph label position adjustments: <https://ggplot2-book.org/themes#modifying-theme-components>
+
 
 It takes a larger cognitive load to read text that is rotated. It is common practice in many journals and media outlets to move the $y$-axis label to the top of the graph under the title.
 
-**8. Specify your $y$-axis label to be empty and move the $y$-axis label into the subtitle.** 
+**8. Specify your** $y$-axis label to be empty and move the $y$-axis label into the subtitle.
 
-<!-- Continue to modify the plot you originally created for question 3! -->
+```{r}
+#| label: Scatterplot pt 5 axis label adjustment
+#| echo: true
+
+scttr_plot + labs(y = NULL, subtitle = "Hindfoot Length (mm)")
+```
+
 
 ## Boxplots
 
 ```{r}
 #| label: boxplot
-
+#| 
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(size = 4))                    # <4>
 
 ```
+4. This source was used to figure out how to adjust axis text size (as the defult size was too large and species labels were overlapping): <https://r-charts.com/ggplot2/axis/>
 
 **9. Create side-by-side boxplots to visualize the distribution of weight within each species.**
 
@@ -167,7 +230,7 @@ Great! Now that you can see the points, you should notice something odd: there a
 
 Some small changes can make **big** differences to plots. One of these changes are better labels for a plot's axes and legend.
 
-**14. Modify the $x$-axis and $y$-axis labels to describe what is being plotted. Be sure to include any necessary units! You might also be getting overlap in the species names -- use `theme(axis.text.x = ____)` or `theme(axis.text.y = ____)` to turn the species axis labels 45 degrees.**
+**14. Modify the** $x$-axis and $y$-axis labels to describe what is being plotted. Be sure to include any necessary units! You might also be getting overlap in the species names -- use `theme(axis.text.x = ____)` or `theme(axis.text.y = ____)` to turn the species axis labels 45 degrees.
 
 <!-- Continue to modify the plot you made for question 10! -->
 
@@ -181,8 +244,6 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 ```
 
 Notice how vertically stacked boxplots make the species labels more readable than horizontally stacked boxplots (even when the axis labels are rotated). This is good practice!
-
-
 
 # Lab 3 Submission
 
