@@ -296,7 +296,26 @@ Some small changes can make **big** differences to plots. One of these changes a
 
 **14. Modify the** $x$-axis and $y$-axis labels to describe what is being plotted. Be sure to include any necessary units! You might also be getting overlap in the species names -- use `theme(axis.text.x = ____)` or `theme(axis.text.y = ____)` to turn the species axis labels 45 degrees.
 
-<!-- Continue to modify the plot you made for question 10! -->
+```{r}
+#| label: Boxplot pt-7 add labels
+#| echo: true
+
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot(outliers = FALSE) +                               
+  theme(axis.text.x = element_text(size = 3)) +
+  geom_point(position = "jitter",
+             aes(color = species, 
+                   alpha = 0.5)) +
+  labs(x = "Species",
+       y = "Weight (g)",
+       ) +
+  theme(axis.text.x = element_text(angle = 45), 
+        axis.text.y = element_text(angle = 45))
+```
+
 
 Some people (and journals) prefer for boxplots to be stacked with a specific orientation! Let's practice changing the orientation of our boxplots.
 
