@@ -189,44 +189,108 @@ scttr_plot + labs(y = NULL, subtitle = "Hindfoot Length (mm)")
 
 ## Boxplots
 
+**9. Create side-by-side boxplots to visualize the distribution of weight within each species.**
 ```{r}
-#| label: boxplot
-#| 
+#| label: Boxplot pt-1 weight by species
+#| echo: true
+
 ggplot(data = surveys, 
        mapping = aes(
          y = weight,
          x = species)) +
   geom_boxplot() +
-  theme(axis.text.x = element_text(size = 4))                    # <4>
+  theme(axis.text.x = element_text(size = 4))                   # <4>
 
 ```
 4. This source was used to figure out how to adjust axis text size (as the defult size was too large and species labels were overlapping): <https://r-charts.com/ggplot2/axis/>
 
-**9. Create side-by-side boxplots to visualize the distribution of weight within each species.**
 
 A fundamental complaint of boxplots is that they do not plot the raw data. However, with **ggplot** we can add the raw points on top of the boxplots!
 
 **10. Add another layer to your previous plot that plots each observation using `geom_point()`.**
 
-<!-- Modify the plot you made for question 9! -->
+```{r}
+#| label: Boxplot pt-2 overlay scatterplot
+#| echo: true
+
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(size = 4)) +
+  geom_point(aes(color = species))
+
+ggplot(data = surveys) +
+  geom_point(aes(x = weight, 
+                 y = species, 
+                 color = species)) +
+  geom_boxplot(aes(x = weight, 
+                   y = species))
+```
+
 
 Alright, this should look less than optimal. Your points should appear rather stacked on top of each other. To make them less stacked, we need to jitter them a bit, using `geom_jitter()`.
 
 **11. Remove the previous layer and include a `geom_jitter()` layer instead.**
 
-<!-- Continue to modify the plot you made for question 9! -->
+```{r}
+#| label: Boxplot pt-3 jitter point overlay
+#| echo: true
+
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(size = 4)) +
+  geom_point(position = "jitter")                                # <5>
+             
+```
+5. I used this source to format 'position' function and 'jitter' command appropriately: <https://r4ds.hadley.nz/layers.html>
+
 
 That should look a bit better! But its really hard to see the points when everything is black.
 
 **12. Set the `color` aesthetic in `geom_jitter()` to change the color of the points and add set the `alpha` aesthetic to add transparency.** You are welcome to use whatever color you wish! Some of my favorites are "springgreen4" and "steelblue4". Check them out on [R Charts](https://r-charts.com/colors/)
 
-<!-- Continue to modify the plot you made for question 9! -->
+```{r}
+#| label: Boxplot pt-4 add color & transparency to overlay 
+#| echo: true
+
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot() +
+  theme(axis.text.x = element_text(size = 3)) +
+  geom_point(position = "jitter",
+             aes(color = species, 
+                   alpha = 0.5)) 
+  
+```
+
 
 Great! Now that you can see the points, you should notice something odd: there are two colors of points still being plotted. Some of the observations are being plotted twice, once from `geom_boxplot()` as outliers and again from `geom_jitter()`!
 
 **13. Inspect the help file for `geom_boxplot()` and see how you can remove the outliers from being plotted by `geom_boxplot()`. Make this change in your code!**
 
-<!-- Continue to modify the plot you made for question 9! -->
+```{r}
+#| label: Boxplot pt-5 remove boxplots outlier point overlays
+#| echo: true
+
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot(outliers = FALSE) +                               # <6>
+  theme(axis.text.x = element_text(size = 3)) +
+  geom_point(position = "jitter",
+             aes(color = species, 
+                   alpha = 0.5)) 
+```
+6. Code line hides boxplot's outlier points. Citation for code source inspired by: <https://ggplot2.tidyverse.org/reference/geom_boxplot.html>
+
 
 Some small changes can make **big** differences to plots. One of these changes are better labels for a plot's axes and legend.
 
