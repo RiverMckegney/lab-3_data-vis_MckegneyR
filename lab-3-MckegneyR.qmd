@@ -305,17 +305,20 @@ ggplot(data = surveys,
          y = weight,
          x = species)) +
   geom_boxplot(outliers = FALSE) +                               
-  theme(axis.text.x = element_text(size = 3)) +
+  theme(axis.text.x = element_text(size = 8)) +
   geom_point(position = "jitter",
              aes(color = species, 
                    alpha = 0.5)) +
   labs(x = "Species",
        y = "Weight (g)",
        ) +
-  theme(axis.text.x = element_text(angle = 45), 
-        axis.text.y = element_text(angle = 45))
+  theme(axis.text.x = element_text(angle = 45),                  # <7>
+        axis.text.y = element_text(angle = 45),                  # <7>
+        legend.text = element_text(size = 10),                   # <7>
+        legend.title = element_text(size = 10))                  # <7>
+        
 ```
-
+7. Adjust size of legend box by changing text size, citation reference: <https://www.spsanderson.com/steveondata/posts/2023-10-10/index.html>
 
 Some people (and journals) prefer for boxplots to be stacked with a specific orientation! Let's practice changing the orientation of our boxplots.
 
@@ -323,8 +326,27 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 
 ```{r}
 #| label: rotated-boxplot
+#| echo: true
+
+ggplot(data = surveys, 
+       mapping = aes(
+         y = weight,
+         x = species)) +
+  geom_boxplot(outliers = FALSE) +  
+  coord_flip() +                                                 # <8>
+  theme(axis.text.x = element_text(size = 8)) +
+  geom_point(position = "jitter",
+             aes(color = species, 
+                   alpha = 0.5)) +
+  labs(x = "Species",
+       y = "Weight (g)",
+       ) +
+  theme(axis.text.x = element_text(angle = 45),                  
+        axis.text.y = element_text(angle = 45),                 
+        legend.key.size = unit(0.1, "in")) # restage legend box size
 
 ```
+8. Reorienting boxplot using coord_flip, because the orientation function was not working here. Citation reference: <https://ggplot2.tidyverse.org/reference/coord_flip.html>
 
 Notice how vertically stacked boxplots make the species labels more readable than horizontally stacked boxplots (even when the axis labels are rotated). This is good practice!
 
@@ -339,3 +361,13 @@ For Lab 3 you will submit the link to your GitHub repository. Your rendered file
 **If any of the options are not included, your Lab 3 or Challenge 3 assignment will receive an "Incomplete" and you will be required to submit a revision.**
 
 In addition, your document should not have any warnings or messages output in your HTML document. **If your HTML contains warnings or messages, you will receive an "Incomplete" for document formatting and you will be required to submit a revision.**
+
+## References: 
+1. *Quarto*. "Code Cells: Knitr". Accessed 25 Feb 2025. <https://quarto.org/docs/reference/cells/cells-knitr.html>.
+2. *Quarto*. "Code Annotation". Accessed 25 Feb 2025. <https://quarto.org/docs/authoring/code-annotation.html>.
+3. Hadley Wickham, Danielle Navarro, and Thomas Lin Pedersen. ggplot2: Elegant Graphics for Data Analysis (3rd Edition). "Modifying Theme Components". Designed using Quarto. Date Accessed 25 Feb 2025. <https://ggplot2-book.org/themes#modifying-theme-components>.
+4. R Charts.  "ggplot2 axis titles, labels, ticks, limits, and scales". R Coder (author José Carlos Soage), 2024. Webpage accessed 25 Feb 2025. <https://r-charts.com/ggplot2/axis/>.
+5. Hadley Wickham, Mine Çetinkaya-Rundel, and Garrett Grolemund. R for Data Science, 2nd edition. "Layers". Webpage accessed 25 Feb 2025. <https://r4ds.hadley.nz/layers.html>.
+6. H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016. "A box and whiskers plot (in the style of Tukey)". Developed by Posit. Site built with pkgdown 2.0.9.  <https://ggplot2.tidyverse.org/reference/geom_boxplot.html>.
+7. Steven P. Sanderson II, MPH. 10 October, 2023. Steve's Data Tips and Tricks. "Resizing Legends in R". <https://www.spsanderson.com/steveondata/posts/2023-10-10/index.html>.
+8. H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016. "Cartesian coordinates with x and y flipped". Developed by Posit. Site built with pkgdown 2.0.9. <https://ggplot2.tidyverse.org/reference/coord_flip.html>.
