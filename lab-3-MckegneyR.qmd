@@ -49,7 +49,8 @@ In the code chunk below, load in the packages necessary for your analysis. You s
 #| output: false  
 #| code-annnotations: hover                                     # <2>
 
-library(tidyverse)                                                                                                               
+library(tidyverse)   
+library(ggridges)
 ```
 1. Source citation of link including specifications used to format cell options: <https://quarto.org/docs/reference/cells/cells-knitr.html>
 2. Source citation of link for formatting the citing of within-code annotations: <https://quarto.org/docs/authoring/code-annotation.html>
@@ -351,6 +352,15 @@ ggplot(data = surveys,
         axis.text.y = element_text(angle = 45),                 
         legend.key.size = unit(0.1, "in")) # restage legend box size
 
+# Challenge problem: Switch boxplot for rigid plot and compare/contrast
+
+# ggplot(surveys, aes(x = species, y = weight)) + 
+#   geom_density_ridges(mapping = aes(x = surveys$weight, y = surveys$species))
+
+# note: y-axis must contain numerical variable
+
+ggplot(surveys, aes(x = weight, y = species)) +
+  geom_density_ridges()
 ```
 8. Reorienting boxplot using coord_flip, because the orientation function was not working here. Citation reference: <https://ggplot2.tidyverse.org/reference/coord_flip.html>
 
