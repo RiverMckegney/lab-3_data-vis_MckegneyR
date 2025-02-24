@@ -2,6 +2,7 @@
 embed-resources: true
 code-tools: true
 echo: true
+theme: cyborg
 ---
 
 # Part 1: Setup
